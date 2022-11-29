@@ -103,23 +103,23 @@ class _InputTextBoxFloat extends StatelessWidget {
   }
 }
 
-class Medikation {
-  String medikation = 'Abilify';
-  int halbwertszeit = 75;
-  Medikation(this.medikation, this.halbwertszeit);
-}
-
 // Screens
 class HomeScreen extends StatefulWidget {
   final List<String> dropdownItems;
+  final Map<String, int> halbwertszeiten;
 
   const HomeScreen(
       {Key? key,
       this.dropdownItems = const [
-        Medikation.medikation,
-        'Medikament 2',
-        'Medikament 3'
-      ]})
+        'Abilify',
+        'Risperidon',
+        'Olanzapin',
+      ],
+      this.halbwertszeiten = const {
+    'Abilify': 10,
+    'Risperidon': 11,
+    'Olanzapin': 12,
+    }})
       : super(key: key);
 
   @override
