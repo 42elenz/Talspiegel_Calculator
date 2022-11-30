@@ -1,9 +1,11 @@
 class Medication {
   String name;
-  int value;
+  int mintal;
+  int hlf;
 
   Medication({
     required this.name,
-    required this.value
+    required this.mintal,
+    required this.hlf
   });
 }
