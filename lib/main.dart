@@ -83,6 +83,40 @@ class _InputTextBox extends StatelessWidget {
   }
 }
 
+class _InputDateBox extends StatelessWidget {
+  final TextEditingController controller;
+  final void Function(String)? onChanged;
+  final String name;
+
+  const _InputDateBox(
+      {Key? key,
+      required this.controller,
+      required this.onChanged,
+      required this.name,})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+      child: DateTimeFormField(
+      decoration: const InputDecoration(
+        hintStyle: TextStyle(color: Colors.black45),
+        errorStyle: TextStyle(color: Colors.redAccent),
+        border: OutlineInputBorder(),
+        suffixIcon: Icon(Icons.event_note),
+        labelText: 'Med.-Verabreichung',
+      ),
+      mode: DateTimeFieldPickerMode.dateAndTime,
+      autovalidateMode: AutovalidateMode.always,
+      validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+      onDateSelected: (DateTime value) {
+        print(value);
+      }),
+    );
+  }
+}
+
 // Screens
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -96,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController textfield2 = TextEditingController();
   TextEditingController textfield3 = TextEditingController();
   TextEditingController textfield4 = TextEditingController();
+  TextEditingController datetime1 = TextEditingController();
 
   List<Medication?> dropdownItems = [
     null,
@@ -260,23 +295,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         children: [
                           Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-                        child: DateTimeFormField(
-                        decoration: const InputDecoration(
-                          hintStyle: TextStyle(color: Colors.black45),
-                          errorStyle: TextStyle(color: Colors.redAccent),
-                          border: OutlineInputBorder(),
-                          suffixIcon: Icon(Icons.event_note),
-                          labelText: 'Med.-Verabreichung',
-                        ),
-                        mode: DateTimeFieldPickerMode.dateAndTime,
-                        autovalidateMode: AutovalidateMode.always,
-                        validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-                        onDateSelected: (DateTime value) {
-                          print(value);
-                        }),
-                      )
+                          child: _InputDateBox(
+                            controller: datetime1,
+                            onChanged: ((p0) => setState(() {})),
+                            name: 'Med.-Gabe'
+                            )
                       ),
                       Expanded(
                       child: Padding(
