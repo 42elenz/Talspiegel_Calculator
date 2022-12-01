@@ -9,6 +9,10 @@ import 'dart:math';
 import 'models.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(const MyApp());
 }
 
@@ -41,24 +45,26 @@ class _InputTextBox extends StatelessWidget {
   final TextEditingController controller;
   final void Function(String)? onChanged;
   final TextInputType? keyboardType;
+  final EdgeInsetsGeometry padding;
   final String? unit;
   final String name;
 
-  const _InputTextBox({Key? key, required this.controller, required this.onChanged, required this.name, this.inputFormatters, this.unit, this.keyboardType = TextInputType.number}) : super(key: key);
+  const _InputTextBox({Key? key, required this.controller, required this.onChanged, required this.name, this.inputFormatters, this.unit, this.keyboardType = TextInputType.number, this.padding = const EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0)}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+      padding: padding,
       child: TextField(
         onChanged: onChanged,
         controller: controller,
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
         decoration: InputDecoration(
-          border: const OutlineInputBorder(), 
-          labelText: name,
-          suffixText: unit
+          border: const OutlineInputBorder(),
+          // labelText: name,
+          suffixText: unit,
+          label: Text(name, style: const TextStyle(fontSize: 16, color: Colors.blueGrey))
         ),
       ),
     );
@@ -84,15 +90,23 @@ class _HomeScreenState extends State<HomeScreen> {
     null,
     Medication(
       name: 'Notriptylin',
-      value: 33
+      mintal: 33,
+      hlf: 24
     ),
     Medication(
       name: 'Risperidon',
-      value: 11
+      mintal: 24,
+      hlf: 11
     ),
     Medication(
       name: 'Olanzapin',
-      value: 12
+      mintal: 24,
+      hlf: 12
+    ),
+    Medication(
+      name: 'asjdhkasdasdasdasdasdasdasd',
+      mintal: 24,
+      hlf: 12
     )
   ];
   Medication? dropdownValue;
@@ -147,71 +161,90 @@ class _HomeScreenState extends State<HomeScreen> {
               Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text("Medikament:", style: TextStyle(fontWeight: FontWeight.bold)),
-                        const SizedBox(width: 13),
-                        DropdownButton(
-                          underline: Container(),
-                          borderRadius: BorderRadius.circular(12),
-                          menuMaxHeight: 300,
-                          value: dropdownValue,
-                          // hint: const Text("Medikament auswählen"),
-                          items: dropdownItems.map((Medication? medication) {
-                            return DropdownMenuItem(
-                              value: medication,
-                              child: medication != null ? Text('${medication.name} - ${medication.value}') : const Text("Standard")
-                            );
-                          }).toList(),
-                          onChanged: (Medication? val) {
-                            setState(() {
-                              textfield4.text = '${val?.value ?? ""}';
-                              dropdownValue = val;
-                            });
-                          }
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            borderRadius: BorderRadius.circular(12),
+                            menuMaxHeight: 300,
+                            value: dropdownValue,
+                            selectedItemBuilder: (BuildContext context) {
+                              return dropdownItems.map((Medication? medication) {
+                                return Container(
+                                  width: 90,
+                                  margin: const EdgeInsets.only(left: 13),
+                                  alignment: Alignment.center,
+                                  child: medication != null ? Text(medication.name, overflow: TextOverflow.ellipsis) : const Text("Standard", overflow: TextOverflow.ellipsis)
+                                );
+                              }).toList();
+                            },
+                            items: dropdownItems.map((Medication? medication) {
+                              return DropdownMenuItem(
+                                value: medication,
+                                child: medication != null ? Text(medication.name, overflow: TextOverflow.visible) : const Text("Standard", overflow: TextOverflow.ellipsis)
+                              );
+                            }).toList(),
+                            onChanged: (Medication? val) {
+                              setState(() {
+                                textfield4.text = '${val?.hlf ?? ""}';
+                                textfield1.text = '${val?.mintal ?? ""}';
+                                dropdownValue = val;
+                              });
+                            }
+                          ),
                         ),
                         Expanded(
                           child: _InputTextBox(
                             controller: textfield4,
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
                             onChanged: (p0) => setState(() {
                               dropdownValue = null;
                             }),
                             inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"[0-9]"))],
-                            name: 'Halbwertszeit',
+                            name: 'HWZ',
                             unit: 'h'
                           ),
                         ),
                       ]
                     )
                   ),
-                  _InputTextBox(
-                    controller: textfield1,
-                    onChanged: (p0) => setState(() {}),
-                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"[0-9]"))],
-                    name: 'Max. Talspiegel',
-                    unit: 'h'
-                  ),
-                  _InputTextBox(
-                    controller: textfield2,
-                    onChanged: (p0) => setState(() {}),
-                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"[0-9]"))],
-                    name: 'Abnahme Zeitpunkt',
-                    unit: 'h'
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _InputTextBox(
+                          controller: textfield1,
+                          onChanged: (p0) => setState(() {}),
+                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"[0-9]"))],
+                          name: 'Min. Talspiegel',
+                          unit: 'h'
+                        ),
+                      ),
+                      Expanded(
+                        child: _InputTextBox(
+                          controller: textfield2,
+                          onChanged: (p0) => setState(() {}),
+                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"[0-9]"))],
+                          name: 'Abnahmezeitpunkt minus letzte Medikationsgabe in Stunden',
+                          unit: 'h'
+                        ),
+                      ),
+                    ],
                   ),
                   _InputTextBox(
                     controller: textfield3,
                     onChanged: (p0) => setState(() {}),
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'(^\d*\,?\d*)'))],
+                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'(^\d*(\,|\.)?\d*)'))],
                     name: 'Konzentration bei Abnahme',
                     unit: 'ng/ml'
                   )
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.all(30.0),
+                padding: const EdgeInsets.only(bottom: 30.0),
                 child: Text(
                   'Talspiegel: ${calculate().toStringAsFixed(2)} ng/ml',
                   style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
