@@ -83,8 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Medication?> dropdownItems = [
     null,
     Medication(
-      name: 'Abilify',
-      value: 10
+      name: 'Notriptylin',
+      value: 33
     ),
     Medication(
       name: 'Risperidon',
@@ -213,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Text(
-                  'Talspiegel: ${calculate().toStringAsFixed(2)}',
+                  'Talspiegel: ${calculate().toStringAsFixed(2)} ng/ml',
                   style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               )
