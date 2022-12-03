@@ -3,11 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:date_field/date_field.dart';
 import 'dart:math';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
 // Models
 import 'models.dart';
@@ -130,7 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController textfield2 = TextEditingController();
   TextEditingController textfield3 = TextEditingController();
   TextEditingController textfield4 = TextEditingController();
-  DateTime? date1;
+  TextEditingController spiegelabn = TextEditingController();
+  DateTime gabe = DateTime.now();
+  DateTime abnahme = DateTime.now();
 
   List<Medication?> dropdownItems = [
     null,
@@ -168,9 +169,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String calculate() {
-    print(date1?.day);
+    Duration diff = abnahme.difference(gabe);
+    int t = diff.inHours < 0 ? -1 : diff.inHours;
+    if (t == -1) return ('Zeiten kontrollieren');
     int halflife = int.tryParse(textfield4.text) ?? 1;
-    double t = double.tryParse(textfield2.text) ?? 0;
     double ct = double.tryParse(textfield3.text.replaceAll(',', '.')) ?? 0;
     double tmin = double.tryParse(textfield1.text) ?? 0;
     double negke = (ln2 / halflife) * -1;
@@ -315,106 +317,92 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       Row(children: [
-                       Expanded(child: 
-                       Padding(
-                         padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-                         child: TextField(
-                          controller: textfield2,
-                          keyboardType: TextInputType.none,
-                          onChanged: (p0) => setState(() {}),
-                          onTap: ()
-                          {
-                             DatePicker.showDateTimePicker(context,
-                                  showTitleActions: true,
-                                  theme: DatePickerTheme(
-                                      headerColor: Colors.blue,
-                                      backgroundColor: Colors.blue,
-                                      itemStyle: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                      doneStyle:
-                                          TextStyle(color: Colors.white, fontSize: 16)),
-                                  onChanged: (date) => setState(() {
-                                  print('change $date in time zone ' +
-                                  date.timeZoneOffset.inHours.toString());
-                                  }), onConfirm: (date) {
-                                    print('confirm $date');
-                                  }, currentTime: DateTime.now(), locale: LocaleType.de);
-                          },
-                          decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
-                            label: Text('Med.-Gabe')
-                            )
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15.0, top: 10.0),
+                            child: TextField(
+                                controller: textfield2,
+                                keyboardType: TextInputType.none,
+                                onChanged: (p0) => setState(() {}),
+                                onTap: () {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
+                                      theme: const DatePickerTheme(
+                                          headerColor: Colors.blue,
+                                          backgroundColor: Colors.blue,
+                                          itemStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                          doneStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16)),
+                                      onConfirm: (date) => setState(() {
+                                            gabe = date;
+                                            if (date.compareTo(abnahme) > 0) {
+                                              textfield2.text = 'kontrollieren';
+                                              return;
+                                            }
+                                            textfield2.text =
+                                                DateFormat('dd/MM/yyyy–kk:mm')
+                                                    .format(date);
+                                            spiegelabn.text =
+                                                DateFormat('dd/MM/yyyy–kk:mm')
+                                                    .format(abnahme);
+                                          }),
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.de);
+                                },
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    label: Text('Med.-Gabe'))),
                           ),
-                       ),
                         ),
-                       Expanded(child: 
-                       _InputTextBox(
-                        controller: textfield2,
-                        onChanged: (p0) => setState(() {}),
-                        maxlength:1,
-                        name:'Med.-Abnahme'
-                        )
-                        )
-                      ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextButton(
-                              onPressed: ()
-                              {
-                                DatePicker.showDatePicker(context,
-                                showTitleActions: true,
-                                theme: DatePickerTheme(
-                                    headerColor: Colors.blue,
-                                    backgroundColor: Colors.blue,
-                                    itemStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                    doneStyle:
-                                        TextStyle(color: Colors.white, fontSize: 16)),
-                                onChanged: (date) {
-                                print('change $date in time zone ' +
-                                date.timeZoneOffset.inHours.toString());
-                                }, onConfirm: (date) {
-                                  print('confirm $date');
-                                }, currentTime: DateTime.now(), locale: LocaleType.de);
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15.0, top: 10.0),
+                            child: TextField(
+                                controller: spiegelabn,
+                                keyboardType: TextInputType.none,
+                                onChanged: (p0) => setState(() {}),
+                                onTap: () {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
+                                      theme: const DatePickerTheme(
+                                          headerColor: Colors.blue,
+                                          backgroundColor: Colors.blue,
+                                          itemStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                          doneStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16)),
+                                      onConfirm: (date) => setState(() {
+                                        abnahme = date;
+                                        if (gabe.compareTo(date) > 0) {
+                                              spiegelabn.text = 'kontrollieren';
+                                              return;
+                                            }
+                                        textfield2.text =
+                                                DateFormat('dd/MM/yyyy–kk:mm')
+                                                    .format(gabe);
+                                            spiegelabn.text =
+                                                DateFormat('dd/MM/yyyy–kk:mm')
+                                                    .format(date);
+
+                                          }),
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.de);
                                 },
-                                child: Text('Zeit wählen',
-                               style: TextStyle(color: Colors.blue),)
-                              )
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    label: Text('Spiegel-Abnahme'))),
                           ),
-                          Expanded(child:
-                          TextButton(
-                              onPressed: ()
-                              {
-                                DatePicker.showDatePicker(context,
-                                showTitleActions: true,
-                                theme: DatePickerTheme(
-                                    headerColor: Colors.blue,
-                                    backgroundColor: Colors.blue,
-                                    itemStyle: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                    doneStyle:
-                                        TextStyle(color: Colors.white, fontSize: 16)),
-                                onChanged: (date) {
-                                print('change $date in time zone ' +
-                                date.timeZoneOffset.inHours.toString());
-                                }, onConfirm: (date) {
-                                  print('confirm $date');
-                                }, currentTime: DateTime.now(), locale: LocaleType.de);
-                                },
-                                child: Text('Zeit wählen',
-                               style: TextStyle(color: Colors.blue),)
-                              )
-                              )
-                        ],
-                      )
+                        ),
+                      ])
                     ],
                   ),
                   Padding(
