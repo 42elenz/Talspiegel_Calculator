@@ -7,6 +7,7 @@ import 'dart:math';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 
 // Models
 import 'models.dart';
@@ -151,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Medication(name: 'Loxapin', mintal: 24, hlf: 7),
     Medication(name: 'Lurasidon', mintal: 24, hlf: 25),
     Medication(name: 'Melperon', mintal: 24, hlf: 5),
-    Medication(name: 'Olanzapin-', mintal: 24, hlf: 33),
+    Medication(name: 'Olanzapin', mintal: 24, hlf: 33),
     Medication(name: 'Paliperidon', mintal: 24, hlf: 720),
     Medication(name: 'Perazin', mintal: 24, hlf: 12),
     Medication(name: 'Pipamperon', mintal: 24, hlf: 19),
@@ -296,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   FilteringTextInputFormatter.allow(
                                       RegExp(r"[0-9]"))
                                 ],
-                                name: 'Min. Talspiegel in h',
+                                name: 'Min. Talspiegel',
                                 unit: 'h'),
                           ),
                           Expanded(
@@ -356,7 +357,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                                 decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
-                                    label: Text('Med.-Gabe'))),
+                                    label: Text('Medikatoinsgabe', style: const TextStyle(fontSize: 16, color: Colors.blueGrey)))
+                                    ),
                           ),
                         ),
                         Expanded(
@@ -381,25 +383,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                               color: Colors.white,
                                               fontSize: 16)),
                                       onConfirm: (date) => setState(() {
-                                        abnahme = date;
-                                        if (gabe.compareTo(date) > 0) {
+                                            abnahme = date;
+                                            if (gabe.compareTo(date) > 0) {
                                               spiegelabn.text = 'kontrollieren';
                                               return;
                                             }
-                                        textfield2.text =
+                                            textfield2.text =
                                                 DateFormat('dd/MM/yyyy–kk:mm')
                                                     .format(gabe);
                                             spiegelabn.text =
                                                 DateFormat('dd/MM/yyyy–kk:mm')
                                                     .format(date);
-
                                           }),
                                       currentTime: DateTime.now(),
                                       locale: LocaleType.de);
                                 },
                                 decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
-                                    label: Text('Spiegel-Abnahme'))),
+                                    label: Text('Spiegel-Abnahme', style: TextStyle(fontSize: 16, color: Colors.blueGrey)))),
                           ),
                         ),
                       ])
