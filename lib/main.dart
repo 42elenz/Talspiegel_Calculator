@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:date_field/date_field.dart';
 import 'dart:math';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 // Models
 import 'models.dart';
@@ -24,6 +26,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+      supportedLocales: [const Locale('de')],
       title: 'Talspiegel Rechner',
       theme: ThemeData(
           useMaterial3: true,
@@ -73,7 +77,6 @@ class _InputTextBox extends StatelessWidget {
         inputFormatters: inputFormatters,
         decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            // labelText: name,
             counterText: "",
             suffixText: unit,
             label: Text(name,
@@ -83,39 +86,36 @@ class _InputTextBox extends StatelessWidget {
   }
 }
 
-class _InputDateBox extends StatelessWidget {
-  final TextEditingController controller;
-  final void Function(String)? onChanged;
+/* class _InputDateBox extends StatelessWidget {
+  final void Function(DateTime)? onSelected;
   final String name;
 
-  const _InputDateBox(
-      {Key? key,
-      required this.controller,
-      required this.onChanged,
-      required this.name,})
-      : super(key: key);
+  const _InputDateBox({
+    Key? key,
+    required this.onSelected,
+    required this.name,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-      child: DateTimeFormField(
-      decoration: const InputDecoration(
-        hintStyle: TextStyle(color: Colors.black45),
-        errorStyle: TextStyle(color: Colors.redAccent),
-        border: OutlineInputBorder(),
-        suffixIcon: Icon(Icons.event_note),
-        labelText: 'Med.-Verabreichung',
-      ),
-      mode: DateTimeFieldPickerMode.dateAndTime,
-      autovalidateMode: AutovalidateMode.always,
-      validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-      onDateSelected: (DateTime value) {
-        print(value);
-      }),
-    );
+        padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+        child: DateTimeFormField(
+            use24hFormat: true,
+            decoration: const InputDecoration(
+              hintStyle: TextStyle(color: Colors.black45),
+              errorStyle: TextStyle(color: Colors.redAccent),
+              border: OutlineInputBorder(),
+              suffixIcon: Icon(Icons.event_note),
+              labelText: 'Med.-Verabreichung',
+            ),
+            mode: DateTimeFieldPickerMode.dateAndTime,
+            autovalidateMode: AutovalidateMode.always,
+            validator: (e) =>
+                (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+            onDateSelected: onSelected));
   }
-}
+} */
 
 // Screens
 class HomeScreen extends StatefulWidget {
@@ -130,14 +130,35 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController textfield2 = TextEditingController();
   TextEditingController textfield3 = TextEditingController();
   TextEditingController textfield4 = TextEditingController();
-  TextEditingController datetime1 = TextEditingController();
+  DateTime? date1;
 
   List<Medication?> dropdownItems = [
     null,
-    Medication(name: 'Notriptylin', mintal: 33, hlf: 24),
-    Medication(name: 'Risperidon', mintal: 24, hlf: 11),
-    Medication(name: 'Olanzapin', mintal: 24, hlf: 12),
-    Medication(name: 'asjdhkasdasdasdasdasdasdasd', mintal: 24, hlf: 12)
+    Medication(name: 'Amisulprid', mintal: 24, hlf: 15),
+    Medication(name: 'Aripiprazol-oral', mintal: 24, hlf: 70),
+    Medication(name: 'Aripiprazol-i.m.', mintal: 24, hlf: 38),
+    Medication(name: 'Asenapin', mintal: 24, hlf: 20),
+    Medication(name: 'Benperidol', mintal: 24, hlf: 5),
+    Medication(name: 'Chlorprothixen', mintal: 24, hlf: 10),
+    Medication(name: 'Clozapin', mintal: 24, hlf: 12),
+    Medication(name: 'Flupentixol', mintal: 24, hlf: 30),
+    Medication(name: 'Fluphenazin-oral', mintal: 24, hlf: 16),
+    Medication(name: 'Fluspirilen', mintal: 24, hlf: 192),
+    Medication(name: 'Haloperidol-oral', mintal: 24, hlf: 17),
+    Medication(name: 'Haloperidol-depot', mintal: 24, hlf: 504),
+    Medication(name: 'Levomepromazin', mintal: 24, hlf: 24),
+    Medication(name: 'Loxapin', mintal: 24, hlf: 7),
+    Medication(name: 'Lurasidon', mintal: 24, hlf: 25),
+    Medication(name: 'Melperon', mintal: 24, hlf: 5),
+    Medication(name: 'Olanzapin-', mintal: 24, hlf: 33),
+    Medication(name: 'Paliperidon', mintal: 24, hlf: 720),
+    Medication(name: 'Perazin', mintal: 24, hlf: 12),
+    Medication(name: 'Pipamperon', mintal: 24, hlf: 19),
+    Medication(name: 'Prothipendyl', mintal: 24, hlf: 2),
+    Medication(name: 'Quetiapin', mintal: 24, hlf: 8),
+    Medication(name: 'Risperidon', mintal: 24, hlf: 3),
+    Medication(name: 'Sertindol', mintal: 24, hlf: 70),
+    Medication(name: 'Ziprasidon', mintal: 24, hlf: 6),
   ];
   Medication? dropdownValue;
 
@@ -147,6 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String calculate() {
+    print(date1?.day);
     int halflife = int.tryParse(textfield4.text) ?? 1;
     double t = double.tryParse(textfield2.text) ?? 0;
     double ct = double.tryParse(textfield3.text.replaceAll(',', '.')) ?? 0;
@@ -292,36 +314,106 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
+                      Row(children: [
+                       Expanded(child: 
+                       Padding(
+                         padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+                         child: TextField(
+                          controller: textfield2,
+                          keyboardType: TextInputType.none,
+                          onChanged: (p0) => setState(() {}),
+                          onTap: ()
+                          {
+                             DatePicker.showDateTimePicker(context,
+                                  showTitleActions: true,
+                                  theme: DatePickerTheme(
+                                      headerColor: Colors.blue,
+                                      backgroundColor: Colors.blue,
+                                      itemStyle: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                      doneStyle:
+                                          TextStyle(color: Colors.white, fontSize: 16)),
+                                  onChanged: (date) => setState(() {
+                                  print('change $date in time zone ' +
+                                  date.timeZoneOffset.inHours.toString());
+                                  }), onConfirm: (date) {
+                                    print('confirm $date');
+                                  }, currentTime: DateTime.now(), locale: LocaleType.de);
+                          },
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            label: Text('Med.-Gabe')
+                            )
+                          ),
+                       ),
+                        ),
+                       Expanded(child: 
+                       _InputTextBox(
+                        controller: textfield2,
+                        onChanged: (p0) => setState(() {}),
+                        maxlength:1,
+                        name:'Med.-Abnahme'
+                        )
+                        )
+                      ],
+                      ),
                       Row(
                         children: [
                           Expanded(
-                          child: _InputDateBox(
-                            controller: datetime1,
-                            onChanged: ((p0) => setState(() {})),
-                            name: 'Med.-Gabe'
-                            )
-                      ),
-                      Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-                        child: DateTimeFormField(
-                        decoration: const InputDecoration(
-                          hintStyle: TextStyle(color: Colors.black45),
-                          errorStyle: TextStyle(color: Colors.redAccent),
-                          border: OutlineInputBorder(),
-                          suffixIcon: Icon(Icons.event_note),
-                          labelText: 'Spiegelabnahme',
-                        ),
-                        mode: DateTimeFieldPickerMode.dateAndTime,
-                        autovalidateMode: AutovalidateMode.always,
-                        validator: (e) => (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-                        onDateSelected: (DateTime value) {
-                          print(value);
-                        },
-                      ),
-                      )
-                      ),                    
-                      ],
+                            child: TextButton(
+                              onPressed: ()
+                              {
+                                DatePicker.showDatePicker(context,
+                                showTitleActions: true,
+                                theme: DatePickerTheme(
+                                    headerColor: Colors.blue,
+                                    backgroundColor: Colors.blue,
+                                    itemStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                    doneStyle:
+                                        TextStyle(color: Colors.white, fontSize: 16)),
+                                onChanged: (date) {
+                                print('change $date in time zone ' +
+                                date.timeZoneOffset.inHours.toString());
+                                }, onConfirm: (date) {
+                                  print('confirm $date');
+                                }, currentTime: DateTime.now(), locale: LocaleType.de);
+                                },
+                                child: Text('Zeit wählen',
+                               style: TextStyle(color: Colors.blue),)
+                              )
+                          ),
+                          Expanded(child:
+                          TextButton(
+                              onPressed: ()
+                              {
+                                DatePicker.showDatePicker(context,
+                                showTitleActions: true,
+                                theme: DatePickerTheme(
+                                    headerColor: Colors.blue,
+                                    backgroundColor: Colors.blue,
+                                    itemStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                    doneStyle:
+                                        TextStyle(color: Colors.white, fontSize: 16)),
+                                onChanged: (date) {
+                                print('change $date in time zone ' +
+                                date.timeZoneOffset.inHours.toString());
+                                }, onConfirm: (date) {
+                                  print('confirm $date');
+                                }, currentTime: DateTime.now(), locale: LocaleType.de);
+                                },
+                                child: Text('Zeit wählen',
+                               style: TextStyle(color: Colors.blue),)
+                              )
+                              )
+                        ],
                       )
                     ],
                   ),
