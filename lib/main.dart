@@ -1,9 +1,11 @@
 // Packages
+
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -34,10 +36,151 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           appBarTheme: const AppBarTheme(
               backgroundColor: Color.fromRGBO(142, 202, 230, 1.0)),
-          colorScheme: ColorScheme.fromSwatch(
-              backgroundColor: const Color.fromRGBO(142, 202, 230, 1.0)),
+          colorScheme: ColorScheme.fromSwatch(backgroundColor: Colors.white),
           fontFamily: GoogleFonts.openSans().fontFamily),
-      home: const HomeScreen(),
+      home: OnBoardingPage(),
+      //const HomeScreen(),
+    );
+  }
+}
+
+//OnBoardingScreen
+class OnBoardingPage extends StatefulWidget {
+  @override
+  _OnBoardingPageState createState() => _OnBoardingPageState();
+}
+
+class _OnBoardingPageState extends State<OnBoardingPage> {
+  final introKey = GlobalKey<IntroductionScreenState>();
+
+  void _onIntroEnd(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
+    );
+  }
+
+  Widget _buildImage(String assetName, [double width = 350]) {
+    return Image.asset('assets/$assetName', width: width);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const bodyStyle = TextStyle(fontSize: 19.0);
+
+    const pageDecoration = const PageDecoration(
+      titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+      bodyTextStyle: bodyStyle,
+      bodyPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+      pageColor: Colors.white,
+      imagePadding: EdgeInsets.zero,
+    );
+
+    return IntroductionScreen(
+      key: introKey,
+      globalBackgroundColor: Colors.white,
+      autoScrollDuration: 5000,
+      globalHeader: Align(
+        alignment: Alignment.topRight,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 14, right: 14),
+            child: _buildImage('logo.png', 40),
+          ),
+        ),
+      ),
+      globalFooter: SizedBox(
+        width: double.infinity,
+        height: 60,
+        child: ElevatedButton(
+          child: const Text(
+            'Lass mich losrechnen!',
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          ),
+          onPressed: () => _onIntroEnd(context),
+        ),
+      ),
+      pages: [
+        PageViewModel(
+          title: "Zur Berechnung des Talspiegel von Psychopharmaka",
+          body: "Keine Gewähr! Nicht zur medizinischen Diagnostik geeignet!",
+          image: _buildImage('5.png'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Medikamentenauswahl",
+          body:
+              "Auswählen und Halbwertszeit (HWZ) automatisch ausfüllen lassen - sonst selbst eine HWZ wählen.",
+          image: _buildImage('1a.png'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Verabreichungs-Abstände",
+          body:
+              "Angabe der Zeit in Stunden zwischen den Einnahmen des Medikaments (z.B. 24h)",
+          image: _buildImage('1.png'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Medikametenspiegel bei Abnahme",
+          body:
+              "Konzentration bei Abnahme. (unter Spiegel-Abnahme entsprechenden Zeitpunkt wählen).",
+          image: _buildImage('2.png'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Zeitintervall",
+          body:
+              "Datum und Uhrzeit der Medikamentengabe bzw. der Spiegelabnahme. (Med.-Gabe VOR dem Spiegel angeben)",
+          image: _buildImage('3.png'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Beispiel",
+          body:
+              "Med. mit HWZ von 33h; 1xtäglich (alle 24h) um 8:00 Einnahme, Spiegel von 89ng/ml bei Abnahme um 14:00",
+          image: _buildImage('4.png'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Talspiegel errechnen",
+          body: "Formel zu Berechnung sowie Video mit Erklärung unter www.talspiegel-rechner.de",
+          image: _buildImage('ergebnis.png'),
+          decoration: pageDecoration,
+        ),
+      ],
+      onDone: () => _onIntroEnd(context),
+      //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
+      showSkipButton: false,
+      skipOrBackFlex: 0,
+      nextFlex: 0,
+      showBackButton: true,
+      //rtl: true, // Display as right-to-left
+      back: const Icon(Icons.arrow_back, color: Color.fromRGBO(112, 160, 182, 1),),
+      skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
+      next: const Icon(Icons.arrow_forward, color: Color.fromRGBO(112, 160, 182, 1),),
+      //done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600), selectionColor: Colors.black,),
+      showDoneButton: false,
+      curve: Curves.fastLinearToSlowEaseIn,
+      controlsMargin: const EdgeInsets.all(8),
+      controlsPadding: kIsWeb
+          ? const EdgeInsets.all(12.0)
+          : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+      dotsDecorator: const DotsDecorator(
+        size: Size(10.0, 10.0),
+        color: Colors.white,
+        activeSize: Size(10.0, 10.0),
+        activeColor: Color.fromRGBO(112, 160, 182, 1),
+        activeShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+        ),
+      ),
+      dotsContainerDecorator: const ShapeDecoration(
+        color: Color.fromRGBO(141, 200, 228, 1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25.0))
+          ,
+        ),
+      ),
     );
   }
 }
@@ -86,36 +229,6 @@ class _InputTextBox extends StatelessWidget {
   }
 }
 
-/* class _InputDateBox extends StatelessWidget {
-  final void Function(DateTime)? onSelected;
-  final String name;
-
-  const _InputDateBox({
-    Key? key,
-    required this.onSelected,
-    required this.name,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
-        child: DateTimeFormField(
-            use24hFormat: true,
-            decoration: const InputDecoration(
-              hintStyle: TextStyle(color: Colors.black45),
-              errorStyle: TextStyle(color: Colors.redAccent),
-              border: OutlineInputBorder(),
-              suffixIcon: Icon(Icons.event_note),
-              labelText: 'Med.-Verabreichung',
-            ),
-            mode: DateTimeFieldPickerMode.dateAndTime,
-            autovalidateMode: AutovalidateMode.always,
-            validator: (e) =>
-                (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-            onDateSelected: onSelected));
-  }
-} */
 
 // Screens
 class HomeScreen extends StatefulWidget {
@@ -297,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   FilteringTextInputFormatter.allow(
                                       RegExp(r"[0-9]"))
                                 ],
-                                name: 'Min. Talspiegel',
+                                name: 'Verabreichungs - Intervall',
                                 unit: 'h'),
                           ),
                           Expanded(
@@ -323,42 +436,45 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.only(
                                 left: 15.0, right: 15.0, top: 10.0),
                             child: TextField(
-                                controller: textfield2,
-                                keyboardType: TextInputType.none,
-                                onChanged: (p0) => setState(() {}),
-                                onTap: () {
-                                  DatePicker.showDateTimePicker(context,
-                                      showTitleActions: true,
-                                      theme: const DatePickerTheme(
-                                          headerColor: Colors.blue,
-                                          backgroundColor: Colors.blue,
-                                          itemStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16),
-                                          doneStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16)),
-                                      onConfirm: (date) => setState(() {
-                                            gabe = date;
-                                            if (date.compareTo(abnahme) > 0) {
-                                              textfield2.text = 'kontrollieren';
-                                              return;
-                                            }
-                                            textfield2.text =
-                                                DateFormat('dd/MM/yyyy–kk:mm')
-                                                    .format(date);
-                                            spiegelabn.text =
-                                                DateFormat('dd/MM/yyyy–kk:mm')
-                                                    .format(abnahme);
-                                          }),
-                                      currentTime: DateTime.now(),
-                                      locale: LocaleType.de);
-                                },
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    label: Text('Medikatoinsgabe', style: const TextStyle(fontSize: 16, color: Colors.blueGrey)))
-                                    ),
+                              controller: textfield2,
+                              keyboardType: TextInputType.none,
+                              onChanged: (p0) => setState(() {}),
+                              onTap: () {
+                                DatePicker.showDateTimePicker(context,
+                                    showTitleActions: true,
+                                    theme: const DatePickerTheme(
+                                        headerColor: Colors.blue,
+                                        backgroundColor: Colors.blue,
+                                        itemStyle: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                        doneStyle: TextStyle(
+                                            color: Colors.white, fontSize: 16)),
+                                    onConfirm: (date) => setState(() {
+                                          gabe = date;
+                                          if (date.compareTo(abnahme) > 0) {
+                                            textfield2.text = 'korrigieren';
+                                            return;
+                                          }
+                                          textfield2.text =
+                                              DateFormat('dd/MM/yyyy–kk:mm')
+                                                  .format(date);
+                                          spiegelabn.text =
+                                              DateFormat('dd/MM/yyyy–kk:mm')
+                                                  .format(abnahme);
+                                        }),
+                                    currentTime: DateTime.now(),
+                                    locale: LocaleType.de);
+                              },
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  label: Text('Medikationsgabe',
+                                      style: const TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.blueGrey))),
+                              style: TextStyle(fontSize: 13),
+                            ),
                           ),
                         ),
                         Expanded(
@@ -366,6 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.only(
                                 left: 15.0, right: 15.0, top: 10.0),
                             child: TextField(
+                                style: TextStyle(fontSize: 13),
                                 controller: spiegelabn,
                                 keyboardType: TextInputType.none,
                                 onChanged: (p0) => setState(() {}),
@@ -385,7 +502,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       onConfirm: (date) => setState(() {
                                             abnahme = date;
                                             if (gabe.compareTo(date) > 0) {
-                                              spiegelabn.text = 'kontrollieren';
+                                              spiegelabn.text = 'korrigieren!';
                                               return;
                                             }
                                             textfield2.text =
@@ -400,7 +517,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                                 decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
-                                    label: Text('Spiegel-Abnahme', style: TextStyle(fontSize: 16, color: Colors.blueGrey)))),
+                                    label: Text('Spiegel-Abnahme',
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.blueGrey)))),
                           ),
                         ),
                       ])
