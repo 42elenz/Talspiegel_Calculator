@@ -28,9 +28,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner:false,
       localizationsDelegates: [GlobalMaterialLocalizations.delegate],
       supportedLocales: [const Locale('de')],
-      title: 'Talspiegel Rechner',
+      title: 'Talspiegel-Rechner',
       theme: ThemeData(
           useMaterial3: true,
           primarySwatch: Colors.blue,
@@ -78,7 +79,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     return IntroductionScreen(
       key: introKey,
       globalBackgroundColor: Colors.white,
-      autoScrollDuration: 5000,
+      autoScrollDuration: 10000,
       globalHeader: Align(
         alignment: Alignment.topRight,
         child: SafeArea(
@@ -91,17 +92,20 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       globalFooter: SizedBox(
         width: double.infinity,
         height: 60,
-        child: ElevatedButton(
-          child: const Text(
-            'Lass mich losrechnen!',
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            child: const Text(
+              'Lass mich losrechnen!',
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            ),
+            onPressed: () => _onIntroEnd(context),
           ),
-          onPressed: () => _onIntroEnd(context),
         ),
       ),
       pages: [
         PageViewModel(
-          title: "Zur Berechnung des Talspiegel von Psychopharmaka",
+          title: "Zur Berechnung des Talspiegels von Psychopharmaka",
           body: "Keine Gewähr! Nicht zur medizinischen Diagnostik geeignet!",
           image: _buildImage('5.png'),
           decoration: pageDecoration,
@@ -116,14 +120,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Verabreichungs-Abstände",
           body:
-              "Angabe der Zeit in Stunden zwischen den Einnahmen des Medikaments (z.B. 24h)",
+              "Angabe der Zeit in Stunden zwischen den Einnahmen des Medikaments (z.B. 24h bei täglicher Einnahme)",
           image: _buildImage('1.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Medikametenspiegel bei Abnahme",
-          body:
-              "Konzentration bei Abnahme. (unter Spiegel-Abnahme entsprechenden Zeitpunkt wählen).",
+          body: "Gemessene Konzentration bei Abnahme.",
           image: _buildImage('2.png'),
           decoration: pageDecoration,
         ),
@@ -137,27 +140,32 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Beispiel",
           body:
-              "Med. mit HWZ von 33h; 1xtäglich (alle 24h) um 8:00 Einnahme, Spiegel von 89ng/ml bei Abnahme um 14:00",
+              "Medikament mit HWZ von 33h; Einnahme 1x täglich (alle 24h) um 8:00, Spiegel von 89ng/ml bei Blutentnahme um 14:00",
           image: _buildImage('4.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Talspiegel errechnen",
-          body: "Formel zu Berechnung sowie Video mit Erklärung unter www.talspiegel-rechner.de",
+          body:
+              "Formel zur Berechnung sowie Video mit Erklärung unter www.talspiegel-rechner.de",
           image: _buildImage('ergebnis.png'),
           decoration: pageDecoration,
         ),
       ],
       onDone: () => _onIntroEnd(context),
-      //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
       showSkipButton: false,
       skipOrBackFlex: 0,
       nextFlex: 0,
       showBackButton: true,
-      //rtl: true, // Display as right-to-left
-      back: const Icon(Icons.arrow_back, color: Color.fromRGBO(112, 160, 182, 1),),
+      back: const Icon(
+        Icons.arrow_back,
+        color: Color.fromRGBO(112, 160, 182, 1),
+      ),
       skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
-      next: const Icon(Icons.arrow_forward, color: Color.fromRGBO(112, 160, 182, 1),),
+      next: const Icon(
+        Icons.arrow_forward,
+        color: Color.fromRGBO(112, 160, 182, 1),
+      ),
       //done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600), selectionColor: Colors.black,),
       showDoneButton: false,
       curve: Curves.fastLinearToSlowEaseIn,
@@ -177,8 +185,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       dotsContainerDecorator: const ShapeDecoration(
         color: Color.fromRGBO(141, 200, 228, 1),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25.0))
-          ,
+          borderRadius: BorderRadius.all(Radius.circular(25.0)),
         ),
       ),
     );
@@ -228,7 +235,6 @@ class _InputTextBox extends StatelessWidget {
     );
   }
 }
-
 
 // Screens
 class HomeScreen extends StatefulWidget {
@@ -307,17 +313,23 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
           appBar: AppBar(
             title: Text(context.findAncestorWidgetOfExactType<Title>()?.title ??
-                "Talspiegel-Rechner"),
+                "Talspiegel-Rechner", style: TextStyle(fontSize: 20)),
             actions: [
               // About Page
               CupertinoButton(
-                  padding: const EdgeInsets.all(13.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: const Icon(Icons.info_outline_rounded),
                   onPressed: () => showAboutDialog(
                       context: context,
-                      // applicationIcon: ,
-                      applicationVersion: "V1.0",
-                      applicationLegalese: "This app is free to use"))
+                      //applicationIcon: ,
+                      applicationVersion: "V1.0; \nDr.med.Esra Lenz",
+                      applicationLegalese:
+                          "This app is free to use. Sources: 'Kompendium der Psychiatrischen Pharmakotherapie', O.Benkert, H.Hippus; 11. Auflage ")
+                          ),
+                          CupertinoButton(
+                  padding: const EdgeInsets.all(10.0),
+                  child: const Icon(Icons.exit_to_app),
+                  onPressed: () =>  SystemNavigator.pop())
             ],
           ),
           body: FractionallySizedBox(
@@ -531,7 +543,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       'Talspiegel: ${calculate()}',
                       style: const TextStyle(
-                          fontSize: 30, fontWeight: FontWeight.bold),
+                          fontSize: 25, fontWeight: FontWeight.normal),
                     ),
                   )
                 ],
