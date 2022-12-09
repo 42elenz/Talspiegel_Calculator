@@ -105,8 +105,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       ),
       pages: [
         PageViewModel(
-          title: "Zur Berechnung des Talspiegels von Psychopharmaka",
-          body: "Keine Gewähr! Nicht zur medizinischen Diagnostik geeignet!",
+          title: "Talspiegelberechnung von Medikamenten",
+          body: "Nicht zur medizinischen Diagnostik geeignet!",
           image: _buildImage('5.png'),
           decoration: pageDecoration,
         ),
@@ -226,7 +226,8 @@ class _InputTextBox extends StatelessWidget {
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
         decoration: InputDecoration(
-            border: const OutlineInputBorder(),
+            border: const OutlineInputBorder(borderSide: BorderSide(
+          width: 4, color: Colors.black)),
             counterText: "",
             suffixText: unit,
             label: Text(name,
