@@ -225,9 +225,9 @@ class _InputTextBox extends StatelessWidget {
         controller: controller,
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
-        decoration: InputDecoration(
-            border: const OutlineInputBorder(borderSide: BorderSide(
-          width: 4, color: Colors.black)),
+        decoration: InputDecoration( 
+            enabledBorder: const OutlineInputBorder(borderSide: BorderSide(
+          width: 1, color: Colors.black38)),
             counterText: "",
             suffixText: unit,
             label: Text(name,
@@ -479,8 +479,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     currentTime: DateTime.now(),
                                     locale: LocaleType.de);
                               },
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
+                              decoration:InputDecoration( 
+                              enabledBorder: const OutlineInputBorder(borderSide: BorderSide(
+                               width: 1, color: Colors.black38)),
                                   label: Text('Medikationsgabe',
                                       style: const TextStyle(
                                           fontSize: 15,
@@ -527,8 +528,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       currentTime: DateTime.now(),
                                       locale: LocaleType.de);
                                 },
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
+                                decoration: InputDecoration( 
+                                enabledBorder: const OutlineInputBorder(borderSide: BorderSide(
+                                width: 1, color: Colors.black38)),
                                     label: Text('Spiegel-Abnahme',
                                         style: TextStyle(
                                             fontSize: 15,
