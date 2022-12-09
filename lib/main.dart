@@ -266,7 +266,6 @@ class _HomeScreenState extends State<HomeScreen> {
     Medication(name: 'Fluphenazin-oral', mintal: 24, hlf: 16),
     Medication(name: 'Fluspirilen', mintal: 24, hlf: 192),
     Medication(name: 'Haloperidol-oral', mintal: 24, hlf: 17),
-    Medication(name: 'Haloperidol-depot', mintal: 24, hlf: 504),
     Medication(name: 'Levomepromazin', mintal: 24, hlf: 24),
     Medication(name: 'Loxapin', mintal: 24, hlf: 7),
     Medication(name: 'Lurasidon', mintal: 24, hlf: 25),
@@ -322,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () => showAboutDialog(
                       context: context,
                       //applicationIcon: ,
-                      applicationVersion: "V1.0; \nDr.med.Esra Lenz",
+                      applicationVersion: "V1.0; \nDr.med.Esra Lenz \n Support by Paul Geeser",
                       applicationLegalese:
                           "This app is free to use. Sources: 'Kompendium der Psychiatrischen Pharmakotherapie', O.Benkert, H.Hippus; 11. Auflage ")
                           ),
