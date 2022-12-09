@@ -227,7 +227,7 @@ class _InputTextBox extends StatelessWidget {
         inputFormatters: inputFormatters,
         decoration: InputDecoration( 
             enabledBorder: const OutlineInputBorder(borderSide: BorderSide(
-          width: 1, color: Colors.black38)),
+          color: Colors.black38)),
             counterText: "",
             suffixText: unit,
             label: Text(name,
