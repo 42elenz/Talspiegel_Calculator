@@ -422,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   FilteringTextInputFormatter.allow(
                                       RegExp(r"[0-9]"))
                                 ],
-                                name: 'Verabreichungs - Intervall',
+                                name: 'Verabreichungsintervall',
                                 unit: 'h'),
                           ),
                           Expanded(
