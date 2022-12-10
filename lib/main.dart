@@ -107,7 +107,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       pages: [
         PageViewModel(
           title: "Talspiegelberechnung von Medikamenten",
-          body: "Nicht zur medizinischen Diagnostik geeignet! Verwenden Sie am Computer Mausrad/Trackpad zur Zeiteinstellung! ",
+          body: "Nicht zur medizinischen Diagnostik geeignet! \n Verwenden Sie am Computer Mausrad/Trackpad zur Zeiteinstellung! ",
           image: _buildImage('5.png'),
           decoration: pageDecoration,
         ),
