@@ -107,7 +107,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       pages: [
         PageViewModel(
           title: "Talspiegelberechnung von Medikamenten",
-          body: "Nicht zur medizinischen Diagnostik geeignet! \n Mausrad/Trackpad zur Zeitauswahl! ",
+          body: "Mausrad/Trackpad zur Zeitauswahl nutzen! ",
           image: _buildImage('5.png'),
           decoration: pageDecoration,
         ),
@@ -148,7 +148,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "Talspiegel errechnen",
           body:
-              "Formel zur Berechnung sowie Video mit Erklärung unter www.talspiegel-rechner.de",
+              "Formel zur Berechnung sowie Video mit Erklärung unter www.talspiegelrechner.de",
           image: _buildImage('ergebnis.png'),
           decoration: pageDecoration,
         ),
@@ -183,7 +183,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           borderRadius: BorderRadius.all(Radius.circular(25.0)),
         ),
       ),
-      dotsContainerDecorator: const ShapeDecoration(
+      dotsContainerDecorator: 
+      const ShapeDecoration(
         color: Color.fromRGBO(141, 200, 228, 1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),
