@@ -482,7 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration:InputDecoration( 
                               enabledBorder: const OutlineInputBorder(borderSide: BorderSide(
                                width: 1, color: Colors.black38)),
-                                  label: Text('Medikationsgabe',
+                                  label: Text('Medikations \n Gabe',
                                       style: const TextStyle(
                                           fontSize: 15,
                                           color: Colors.blueGrey))),
