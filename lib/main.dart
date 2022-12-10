@@ -20,6 +20,7 @@ void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   runApp(const MyApp());
+  
 }
 
 class MyApp extends StatelessWidget {
@@ -482,7 +483,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration:InputDecoration( 
                               enabledBorder: const OutlineInputBorder(borderSide: BorderSide(
                                width: 1, color: Colors.black38)),
-                                  label: Text('Medikations \n Gabe',
+                                  label: Text('Medikationsgabe',
                                       style: const TextStyle(
                                           fontSize: 15,
                                           color: Colors.blueGrey))),
