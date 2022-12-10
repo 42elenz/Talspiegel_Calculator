@@ -107,7 +107,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       pages: [
         PageViewModel(
           title: "Talspiegelberechnung von Medikamenten",
-          body: "Nicht zur medizinischen Diagnostik geeignet!",
+          body: "Nicht zur medizinischen Diagnostik geeignet! Verwenden Sie am Computer Mausrad/Trackpad zur Zeiteinstellung! ",
           image: _buildImage('5.png'),
           decoration: pageDecoration,
         ),
@@ -467,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     onConfirm: (date) => setState(() {
                                           gabe = date;
                                           if (date.compareTo(abnahme) > 0) {
-                                            textfield2.text = 'korrigieren';
+                                            textfield2.text = 'Chronologie beachten!';
                                             return;
                                           }
                                           textfield2.text =
@@ -516,7 +516,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       onConfirm: (date) => setState(() {
                                             abnahme = date;
                                             if (gabe.compareTo(date) > 0) {
-                                              spiegelabn.text = 'korrigieren!';
+                                              spiegelabn.text = 'Chronologie beachten!';
                                               return;
                                             }
                                             textfield2.text =
