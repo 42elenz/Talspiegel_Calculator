@@ -19,4 +19,4 @@ Check out the website with an online app and the link to the android store:
 This App was made with flutter and is easily deployable as a webapp, IOS and Android. 
 
 ## Acknowledgment
-A project by Dr. Esra Lenz based on the idea of Dr. Eckermann.
+A project by Dr. Esra Lenz with help from Paul Geeser based on the idea of Dr. Eckermann.
