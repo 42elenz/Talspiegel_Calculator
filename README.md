@@ -18,8 +18,7 @@ Check out the website with an online app and the link to the android store:
 ## Technical
 This App was made with flutter and is easily deployable as a webapp, IOS and Android. 
 
-![mainscree](https://github.com/42elenz/Talspiegel_Calculator/blob/master/main.jpeg)
-![calculationscreen](https://github.com/42elenz/Talspiegel_Calculator/blob/master/Example.jpeg)
+<img src="https://github.com/42elenz/Talspiegel_Calculator/blob/master/main.jpeg" width="25%">.....<img src="https://github.com/42elenz/Talspiegel_Calculator/blob/master/Example.jpeg" width="25%">
 
 ## Acknowledgment
 A project by Dr. Esra Lenz with help from Paul Geeser based on the idea of Dr. Eckermann.
